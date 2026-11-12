@@ -6,3 +6,17 @@ const divide = (a, b) => a / b;
 let firstNumber = "";
 let operator = "";
 let secondNumber = "";
+
+const operate = function (operator, a, b) {
+  if (operator === "+") {
+    return add(a, b);
+  } else if (operator === "-") {
+    return subtract(a, b);
+  } else if (operator === "*") {
+    return multiply(a, b);
+  } else if (operator === "/") {
+    return divide(a, b);
+  } else {
+    return null;
+  }
+};
