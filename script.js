@@ -23,16 +23,41 @@ const operate = function (op, a, b) {
 
 const display = document.querySelector("#display");
 const digitButtons = document.querySelectorAll(".digit");
+const operatorButtons = document.querySelectorAll(".operator");
+const equalsButton = document.querySelector(".equals");
 
 const updateDisplay = function () {
-  display.textContent = firstNumber;
+  if (operator === "") {
+    display.textContent = firstNumber;
+  } else {
+    display.textContent = secondNumber;
+  }
 };
 
 const appendDigit = function (digit) {
-  firstNumber += digit;
+  if (operator === "") {
+    firstNumber += digit;
+  } else {
+    secondNumber += digit;
+  }
   updateDisplay();
 };
 
 digitButtons.forEach((button) => {
   button.addEventListener("click", () => appendDigit(button.textContent));
+});
+
+operatorButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    operator = button.textContent;
+  });
+});
+
+equalsButton.addEventListener("click", () => {
+  if (operator === "" || secondNumber === "") return;
+  let result = operate(operator, Number(firstNumber), Number(secondNumber));
+  firstNumber = String(result);
+  operator = "";
+  secondNumber = "";
+  updateDisplay();
 });
