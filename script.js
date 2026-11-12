@@ -7,16 +7,32 @@ let firstNumber = "";
 let operator = "";
 let secondNumber = "";
 
-const operate = function (operator, a, b) {
-  if (operator === "+") {
+const operate = function (op, a, b) {
+  if (op === "+") {
     return add(a, b);
-  } else if (operator === "-") {
+  } else if (op === "-") {
     return subtract(a, b);
-  } else if (operator === "*") {
+  } else if (op === "*") {
     return multiply(a, b);
-  } else if (operator === "/") {
+  } else if (op === "/") {
     return divide(a, b);
   } else {
     return null;
   }
 };
+
+const display = document.querySelector("#display");
+const digitButtons = document.querySelectorAll(".digit");
+
+const updateDisplay = function () {
+  display.textContent = firstNumber;
+};
+
+const appendDigit = function (digit) {
+  firstNumber += digit;
+  updateDisplay();
+};
+
+digitButtons.forEach((button) => {
+  button.addEventListener("click", () => appendDigit(button.textContent));
+});
