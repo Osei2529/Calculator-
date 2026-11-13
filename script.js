@@ -46,7 +46,8 @@ const appendDigit = function (digit) {
 // Works out firstNumber (operator) secondNumber,
 // stores the result in firstNumber and clears secondNumber
 const calculate = function () {
-  const result = operate(operator, Number(firstNumber), Number(secondNumber));
+  let result = operate(operator, Number(firstNumber), Number(secondNumber));
+  result = Number(result.toFixed(8));
   firstNumber = String(result);
   secondNumber = "";
 };
