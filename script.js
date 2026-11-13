@@ -43,21 +43,35 @@ const appendDigit = function (digit) {
   updateDisplay();
 };
 
+// Works out firstNumber (operator) secondNumber,
+// stores the result in firstNumber and clears secondNumber
+const calculate = function () {
+  const result = operate(operator, Number(firstNumber), Number(secondNumber));
+  firstNumber = String(result);
+  secondNumber = "";
+};
+
 digitButtons.forEach((button) => {
   button.addEventListener("click", () => appendDigit(button.textContent));
 });
 
 operatorButtons.forEach((button) => {
   button.addEventListener("click", () => {
-    operator = button.textContent;
+    if (firstNumber === "") return; // nothing to operate on yet
+
+    // calculate with the OLD operator, before replacing it
+    if (operator !== "" && secondNumber !== "") {
+      calculate();
+    }
+
+    operator = button.textContent; // now store the NEW operator
+    display.textContent = firstNumber; // user is looking at the first number
   });
 });
 
 equalsButton.addEventListener("click", () => {
   if (operator === "" || secondNumber === "") return;
-  let result = operate(operator, Number(firstNumber), Number(secondNumber));
-  firstNumber = String(result);
+  calculate();
   operator = "";
-  secondNumber = "";
   updateDisplay();
 });
