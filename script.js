@@ -23,9 +23,11 @@ const operate = function (op, a, b) {
 
 const display = document.querySelector("#display");
 display.textContent = 0;
+
 const digitButtons = document.querySelectorAll(".digit");
 const operatorButtons = document.querySelectorAll(".operator");
 const equalsButton = document.querySelector(".equals");
+const clearButton = document.querySelector(".clear");
 
 const updateDisplay = function () {
   if (operator === "") {
@@ -44,14 +46,16 @@ const appendDigit = function (digit) {
   updateDisplay();
 };
 
-// Works out firstNumber (operator) secondNumber,
-// stores the result in firstNumber and clears secondNumber
+const clearAll = function () {
+  firstNumber = "";
+  operator = "";
+  secondNumber = "";
+};
+
 const calculate = function () {
   if (operator === "/" && Number(secondNumber) === 0) {
+    clearAll();
     display.textContent = "Nice try";
-    firstNumber = "";
-    operator = "";
-    secondNumber = "";
     return false;
   }
   let result = operate(operator, Number(firstNumber), Number(secondNumber));
@@ -69,7 +73,7 @@ operatorButtons.forEach((button) => {
   button.addEventListener("click", () => {
     if (firstNumber === "") return;
     if (operator !== "" && secondNumber !== "") {
-      if (calculate() === false) return;
+      if (!calculate()) return;
     }
 
     operator = button.textContent; // now store the NEW operator
@@ -79,8 +83,13 @@ operatorButtons.forEach((button) => {
 
 equalsButton.addEventListener("click", () => {
   if (operator === "" || secondNumber === "") return;
-  if (calculate() === true) {
+  if (calculate()) {
     operator = "";
     updateDisplay();
   }
+});
+
+clearButton.addEventListener("click", () => {
+  clearAll();
+  display.textContent = 0;
 });
