@@ -37,7 +37,13 @@ const updateDisplay = function () {
   }
 };
 
+let resultShown = false;
+
 const appendDigit = function (digit) {
+  if (resultShown && operator === "") {
+    firstNumber = "";
+    resultShown = false;
+  }
   if (operator === "") {
     firstNumber += digit;
   } else {
@@ -50,6 +56,7 @@ const clearAll = function () {
   firstNumber = "";
   operator = "";
   secondNumber = "";
+  resultShown = false;
 };
 
 const calculate = function () {
@@ -85,6 +92,7 @@ equalsButton.addEventListener("click", () => {
   if (operator === "" || secondNumber === "") return;
   if (calculate()) {
     operator = "";
+    resultShown = true;
     updateDisplay();
   }
 });
