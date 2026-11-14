@@ -73,37 +73,43 @@ const calculate = function () {
   return true;
 };
 
-digitButtons.forEach((button) => {
-  button.addEventListener("click", () => appendDigit(button.textContent));
-});
+const handleOperator = function (op) {
+  if (firstNumber === "") return;
+  if (operator !== "" && secondNumber !== "") {
+    if (!calculate()) return;
+  }
 
-operatorButtons.forEach((button) => {
-  button.addEventListener("click", () => {
-    if (firstNumber === "") return;
-    if (operator !== "" && secondNumber !== "") {
-      if (!calculate()) return;
-    }
+  operator = op;
+  display.textContent = firstNumber;
+  refreshDecimalButton();
+};
 
-    operator = button.textContent;
-    display.textContent = firstNumber;
-    refreshDecimalButton();
-  });
-});
-
-equalsButton.addEventListener("click", () => {
+const handleEquals = function () {
   if (operator === "" || secondNumber === "") return;
   if (calculate()) {
     operator = "";
     resultShown = true;
     updateDisplay();
   }
-});
+};
 
-clearButton.addEventListener("click", () => {
+const handleClear = function () {
   clearAll();
   display.textContent = 0;
   refreshDecimalButton();
+};
+
+digitButtons.forEach((button) => {
+  button.addEventListener("click", () => appendDigit(button.textContent));
 });
+
+operatorButtons.forEach((button) =>
+  button.addEventListener("click", () => handleOperator(button.textContent)),
+);
+
+equalsButton.addEventListener("click", handleEquals);
+
+clearButton.addEventListener("click", handleClear);
 
 const getCurrentNumber = function () {
   if (resultShown && operator === "") return "";
@@ -133,3 +139,24 @@ const backSpace = function () {
 };
 
 backspaceButton.addEventListener("click", backSpace);
+
+document.addEventListener("keydown", (event) => {
+  const key = event.key;
+  if ("0123456789".includes(key)) {
+    appendDigit(key);
+  } else if (key === ".") {
+    appendDecimal();
+  } else if (["+", "-", "*", "/"].includes(key)) {
+    handleOperator(key);
+  } else if (key === "Enter" || key === "=") {
+    handleEquals();
+  } else if (key === "Backspace") {
+    backSpace();
+  } else if (key.toLowerCase() === "c" || key === "Escape") {
+    handleClear();
+  } else {
+    return;
+  }
+
+  event.preventDefault();
+});
