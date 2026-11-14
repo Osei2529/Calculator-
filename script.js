@@ -28,6 +28,7 @@ const digitButtons = document.querySelectorAll(".digit");
 const operatorButtons = document.querySelectorAll(".operator");
 const equalsButton = document.querySelector(".equals");
 const clearButton = document.querySelector(".clear");
+const decimalButton = document.querySelector(".decimal");
 
 const updateDisplay = function () {
   if (operator === "") {
@@ -35,6 +36,7 @@ const updateDisplay = function () {
   } else {
     display.textContent = secondNumber;
   }
+  refreshDecimalButton();
 };
 
 let resultShown = false;
@@ -63,6 +65,7 @@ const calculate = function () {
   if (operator === "/" && Number(secondNumber) === 0) {
     clearAll();
     display.textContent = "Nice try";
+    refreshDecimalButton();
     return false;
   }
   let result = operate(operator, Number(firstNumber), Number(secondNumber));
@@ -83,8 +86,9 @@ operatorButtons.forEach((button) => {
       if (!calculate()) return;
     }
 
-    operator = button.textContent; // now store the NEW operator
-    display.textContent = firstNumber; // user is looking at the first number
+    operator = button.textContent;
+    display.textContent = firstNumber;
+    refreshDecimalButton();
   });
 });
 
@@ -100,4 +104,22 @@ equalsButton.addEventListener("click", () => {
 clearButton.addEventListener("click", () => {
   clearAll();
   display.textContent = 0;
+  refreshDecimalButton();
 });
+
+const getCurrentNumber = function () {
+  if (resultShown && operator === "") return "";
+  return operator === "" ? firstNumber : secondNumber;
+};
+
+const appendDecimal = function () {
+  const current = getCurrentNumber();
+  if (current.includes(".")) return;
+  appendDigit(current === "" ? "0." : ".");
+};
+
+const refreshDecimalButton = function () {
+  decimalButton.disabled = getCurrentNumber().includes(".");
+};
+
+decimalButton.addEventListener("click", appendDecimal);
