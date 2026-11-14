@@ -29,13 +29,11 @@ const operatorButtons = document.querySelectorAll(".operator");
 const equalsButton = document.querySelector(".equals");
 const clearButton = document.querySelector(".clear");
 const decimalButton = document.querySelector(".decimal");
+const backspaceButton = document.querySelector(".backspace");
 
 const updateDisplay = function () {
-  if (operator === "") {
-    display.textContent = firstNumber;
-  } else {
-    display.textContent = secondNumber;
-  }
+  const value = operator === "" ? firstNumber : secondNumber;
+  display.textContent = value === "" ? 0 : value;
   refreshDecimalButton();
 };
 
@@ -123,3 +121,15 @@ const refreshDecimalButton = function () {
 };
 
 decimalButton.addEventListener("click", appendDecimal);
+
+const backSpace = function () {
+  if (getCurrentNumber() === "") return;
+  if (operator === "") {
+    firstNumber = firstNumber.slice(0, -1);
+  } else {
+    secondNumber = secondNumber.slice(0, -1);
+  }
+  updateDisplay();
+};
+
+backspaceButton.addEventListener("click", backSpace);
