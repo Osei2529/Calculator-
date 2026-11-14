@@ -22,6 +22,7 @@ const operate = function (op, a, b) {
 };
 
 const display = document.querySelector("#display");
+display.textContent = 0;
 const digitButtons = document.querySelectorAll(".digit");
 const operatorButtons = document.querySelectorAll(".operator");
 const equalsButton = document.querySelector(".equals");
@@ -46,10 +47,18 @@ const appendDigit = function (digit) {
 // Works out firstNumber (operator) secondNumber,
 // stores the result in firstNumber and clears secondNumber
 const calculate = function () {
+  if (operator === "/" && Number(secondNumber) === 0) {
+    display.textContent = "Nice try";
+    firstNumber = "";
+    operator = "";
+    secondNumber = "";
+    return false;
+  }
   let result = operate(operator, Number(firstNumber), Number(secondNumber));
   result = Number(result.toFixed(8));
   firstNumber = String(result);
   secondNumber = "";
+  return true;
 };
 
 digitButtons.forEach((button) => {
@@ -58,11 +67,9 @@ digitButtons.forEach((button) => {
 
 operatorButtons.forEach((button) => {
   button.addEventListener("click", () => {
-    if (firstNumber === "") return; // nothing to operate on yet
-
-    // calculate with the OLD operator, before replacing it
+    if (firstNumber === "") return;
     if (operator !== "" && secondNumber !== "") {
-      calculate();
+      if (calculate() === false) return;
     }
 
     operator = button.textContent; // now store the NEW operator
@@ -72,7 +79,8 @@ operatorButtons.forEach((button) => {
 
 equalsButton.addEventListener("click", () => {
   if (operator === "" || secondNumber === "") return;
-  calculate();
-  operator = "";
-  updateDisplay();
+  if (calculate() === true) {
+    operator = "";
+    updateDisplay();
+  }
 });
